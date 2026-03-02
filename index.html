@@ -205,7 +205,7 @@ canvas{image-rendering:pixelated;display:block;}
   <div class="title-stars" id="titleStars"></div>
   <div class="title-logo">
     <canvas id="titleCatCanvas" width="128" height="128" style="display:none;"></canvas>
-    <img id="titleCatImg" src="assets/characters/nyom_ult.png" alt="Nyom Cat"
+    <img id="titleCatImg" src="assets/nyom_ult.png" alt="Nyom Cat"
          style="width:128px;height:128px;image-rendering:pixelated;object-fit:contain;margin:0 auto 14px;display:block;filter:drop-shadow(0 0 16px #f07898);animation:titlePulse 1.5s ease-in-out infinite;"/>
     <h1>MYNAA'S<br>BATTLE QUEST</h1>
     <div class="love-tag">💌 hey there cantikk, i lovee youu 💌</div>
@@ -272,7 +272,7 @@ canvas{image-rendering:pixelated;display:block;}
         <div class="sprite-shadow"></div>
       </div>
       <div class="sprite-wrap enemy" id="enemySprite">
-        <img id="enemyImg" class="sprite-img" src="" alt="enemy"/>
+        <canvas id="enemyCanvas" width="128" height="128" style="image-rendering:pixelated;display:block;"></canvas>
         <div class="sprite-shadow"></div>
       </div>
     </div>
@@ -974,7 +974,7 @@ const CHARS = {
     name:'NYOM CAT', type:'Cosmic Eater',
     hp:120,mp:100, atk:22,def:12,spd:18,
     idle:pinkCat_idle, attack:pinkCat_attack, ult:pinkCat_ult,
-    imgs:{ idle:'assets/characters/nyom_idle.png', attack:'assets/characters/nyom_attack.png', ult:'assets/characters/nyom_ult.png' },
+    imgs:{ idle:'assets/nyom_idle.png', attack:'assets/nyom_attack.png', ult:'assets/nyom_ult.png' },
     color:'#f07898',
     skill:{name:'NYOM BITE',mp:25,dmg:35,desc:'Cosmic chomp!'},
     ultimate:{name:'ULTIMATE NYOM',dmg:80,desc:'Galaxy-eating fury!'},
@@ -984,7 +984,7 @@ const CHARS = {
     name:'NEO CAT', type:'Starry Eyes',
     hp:100,mp:120, atk:18,def:16,spd:20,
     idle:greyCat_idle, attack:greyCat_attack, ult:greyCat_ult,
-    imgs:{ idle:'assets/characters/neo_idle.png', attack:'assets/characters/neo_attack.png', ult:'assets/characters/neo_ult.png' },
+    imgs:{ idle:'assets/neo_idle.png', attack:'assets/neo_attack.png', ult:'assets/neo_ult.png' },
     color:'#5a8aaa',
     skill:{name:'HEART BEAM',mp:30,dmg:30,desc:'Love is power!'},
     ultimate:{name:'STARRY EYES',dmg:75,desc:'Galaxy magic unleashed!'},
@@ -994,7 +994,7 @@ const CHARS = {
     name:'RAIZE BEAST', type:'Peks Drifting',
     hp:150,mp:80, atk:28,def:20,spd:15,
     idle:car_idle, attack:car_attack, ult:car_ult,
-    imgs:{ idle:'assets/characters/car_idle.png', attack:'assets/characters/car_attack.png', ult:'assets/characters/car_ult.png' },
+    imgs:{ idle:'assets/car_idle.png', attack:'assets/car_attack.png', ult:'assets/car_ult.png' },
     color:'#aabbcc',
     skill:{name:'PEKS DRIFT',mp:20,dmg:40,desc:'Burnout attack!'},
     ultimate:{name:'TURBO DRIFT',dmg:90,desc:'Maximum PEKS DRIFTING!'},
@@ -1004,13 +1004,13 @@ const CHARS = {
 
 const LEVELS = [
   {name:'CITY STREETS',bg:'city',ground:'city',enemyFn:enemy_thug,enemyName:'STREET PUNK',
-   enemyImg:'assets/characters/enemy_thug.png',
+   enemyImg:null,
    enemyHp:80,enemyAtk:15,enemyDef:8,waves:3,music:'🌆'},
   {name:'STUDY ROOM',bg:'study',ground:'study',enemyFn:enemy_books,enemyName:'EXAM DREAD',
-   enemyImg:'assets/characters/enemy_books.png',
+   enemyImg:null,
    enemyHp:100,enemyAtk:18,enemyDef:10,waves:3,music:'📚'},
   {name:'GALAXY HEART',bg:'galaxy',ground:'galaxy',enemyFn:enemy_boss,enemyName:'COSMIC BOSS',
-   enemyImg:'assets/characters/enemy_boss.png',
+   enemyImg:null,
    enemyHp:160,enemyAtk:25,enemyDef:15,waves:1,music:'💜'},
 ];
 
@@ -1068,15 +1068,16 @@ function showSelect(){
 // ══════════════════════════════════════════════
 // ── Sprite image helpers ──
 function setPlayerSprite(state){
-  // state = 'idle' | 'attack' | 'ult'
   const img = document.getElementById('playerImg');
   img.src = G.playerChar.imgs[state] || G.playerChar.imgs.idle;
 }
-function setEnemySprite(src){
-  document.getElementById('enemyImg').src = src;
+function setEnemySprite(enemyFn){
+  // Enemies are drawn via canvas (code-generated pixel art)
+  const cv = document.getElementById('enemyCanvas');
+  drawSprite(cv, enemyFn, 4);
 }
 function clearEnemySprite(){
-  document.getElementById('enemyImg').src = '';
+  clearCanvas(document.getElementById('enemyCanvas'));
 }
 
 function startBattle(){ G.currentLevel=0; initBattle(); }
@@ -1110,9 +1111,9 @@ function initBattle(){
     drawGalaxy();
   }
 
-  // Set sprites from asset images
+  // Set sprites — player from asset image, enemy from canvas drawing
   setPlayerSprite('idle');
-  setEnemySprite(lv.enemyImg);
+  setEnemySprite(lv.enemyFn);
 
   document.getElementById('playerName').textContent=ch.name;
   document.getElementById('levelBadge').textContent='LVL '+(G.currentLevel+1);
@@ -1134,7 +1135,7 @@ function initWave(){
   G.enemyHp=Math.floor(lv.enemyHp*m); G.enemyMaxHp=G.enemyHp;
   document.getElementById('waveLabel').textContent='WAVE '+G.wave+'/'+lv.waves;
   document.getElementById('enemyName').textContent=G.wave>1?lv.enemyName+' ★':lv.enemyName;
-  setEnemySprite(lv.enemyImg);
+  setEnemySprite(lv.enemyFn);
 }
 
 function buildCity(){
