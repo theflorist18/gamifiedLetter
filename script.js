@@ -208,7 +208,7 @@ function initBattle(){
   initWave();
 
   // Env Update
-  document.getElementById('battleBg').className = 'battle-bg bg-'+lv.bg;
+  document.getElementById('battleBg').className = 'battle-bg bg-' + lv.bg;
   document.getElementById('rainLayer').innerHTML='';
   document.getElementById('galaxyLayer').style.display='none';
 

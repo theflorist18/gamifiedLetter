@@ -306,4 +306,20 @@ canvas{image-rendering:pixelated;display:block;}
   .letter-popup{padding:24px 20px;}
   #letterContent{font-size:1.5rem;}
   .letter-title{font-size:.55rem;}
+
+  /* Beautiful New Background Images */
+.battle-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0; 
+  background-size: cover; 
+  background-position: center bottom; 
+  image-rendering: pixelated; 
+  transition: background-image 0.5s ease-in-out; /* Smooth fade between levels */
+}
+
+/* The three level backgrounds */
+.bg-city { background-image: url('assets/background/streetLevel.png'); }
+.bg-study { background-image: url('assets/background/deskLevel.png'); }
+.bg-galaxy { background-image: url('assets/background/spaceLevel.png'); }
 }
