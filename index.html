@@ -11,8 +11,8 @@
   --bg:#0a0a1a;--pink1:#f07898;--pink2:#e8a0b8;--dark-pink:#a03060;
   --purple1:#5a3a8a;--cyan:#00e5ff;--yellow:#ffe234;--red:#ff3a3a;
   --white:#f0f4ff;--shadow:rgba(0,0,0,0.7);
-  --panel-bg:linear-gradient(135deg,#f0f0f0,#d8d8d8);
-  --panel-border:#333;
+  --panel-bg:rgba(20, 20, 35, 0.85); /* Dark translucent UI */
+  --panel-border:#f07898;
 }
 body{background:var(--bg);font-family:'Press Start 2P',monospace;color:var(--white);
   min-height:100vh;overflow:hidden;display:flex;align-items:center;justify-content:center;}
@@ -82,45 +82,41 @@ canvas{image-rendering:pixelated;display:block;}
 #battleScreen{padding:0;overflow:hidden;}
 .battle-wrap{width:100%;height:100vh;display:flex;flex-direction:column;position:relative;}
 
-/* Backgrounds */
-.battle-bg{position:absolute;inset:0;z-index:0;}
-.bg-city{background:linear-gradient(180deg,#060015 0%,#0d0028 25%,#180040 45%,#0d001a 65%,#060012 100%);}
-.bg-study{background:linear-gradient(180deg,#050200 0%,#100800 30%,#1e1000 55%,#120a00 100%);}
-.bg-galaxy{background:radial-gradient(ellipse at 50% 55%,#3a0060 0%,#1a0035 35%,#0a0020 70%,#040010 100%);}
-.ground{position:absolute;bottom:0;left:0;right:0;height:40%;z-index:1;
-  transform-origin:top;transform:perspective(600px) rotateX(35deg);}
-.ground-city{background:linear-gradient(180deg,#150028 0%,#0a0018 50%,#060010 100%);border-top:4px solid #7700dd;}
-.ground-city::after{content:'';position:absolute;inset:0;
-  background:repeating-linear-gradient(90deg,transparent,transparent 48px,rgba(120,0,220,.15) 48px,rgba(120,0,220,.15) 50px);}
-.ground-study{background:linear-gradient(180deg,#201000 0%,#140a00 100%);border-top:4px solid #c07030;}
-.ground-galaxy{background:radial-gradient(ellipse at 50% 0%,#280050 0%,#100020 60%,#060010 100%);border-top:4px solid #bb00ff;}
+/* Beautiful New Background Images */
+.battle-bg{position:absolute;inset:0;z-index:0; background-size: cover; background-position: center bottom; image-rendering: pixelated; transition: background-image 0.5s ease-in-out;}
+.bg-city{background-image: url('assets/background/streetLevel.png');}
+.bg-study{background-image: url('assets/background/deskLevel.png');}
+.bg-galaxy{background-image: url('assets/background/spaceLevel.png');}
 
-/* ══ ARENA LAYOUT (true Pokémon positioning) ══ */
+/* Hide old CSS drawn decors because images handle it now */
+#neonSigns, #buildingsLayer, #studyLayer, .ground { display: none !important; }
+
+/* ══ ARENA LAYOUT ══ */
 .arena{position:relative;flex:1;z-index:5;min-height:0;}
 
-/* Enemy: top-right corner sprite + top-left panel */
-#enemySprite{position:absolute;right:8%;bottom:42%;transform:scale(1.8) scaleX(-1);transform-origin:bottom center;}
+/* Enemy */
+#enemySprite{position:absolute;right:8%; bottom:28%; transform:scale(1.8) scaleX(-1); transform-origin:bottom center;}
 #enemyStatus{position:absolute;top:6%;left:4%;
   background:var(--panel-bg);border:3px solid var(--panel-border);border-radius:10px;
-  padding:10px 16px;box-shadow:4px 4px 0 rgba(0,0,0,0.6);color:#111;
-  min-width:220px;max-width:260px;}
+  padding:10px 16px;box-shadow:6px 6px 0 rgba(0,0,0,0.6);color:#fff;
+  min-width:220px;max-width:260px;backdrop-filter: blur(4px);}
 
-/* Player: bottom-left corner sprite + bottom-right panel */
-#playerSprite{position:absolute;left:8%;bottom:42%;transform:scale(1.8);transform-origin:bottom center;}
-#playerStatus{position:absolute;bottom:30%;right:4%;
+/* Player */
+#playerSprite{position:absolute;left:8%; bottom:28%; transform:scale(1.8); transform-origin:bottom center;}
+#playerStatus{position:absolute;bottom:34%;right:4%;
   background:var(--panel-bg);border:3px solid var(--panel-border);border-radius:10px;
-  padding:10px 16px;box-shadow:4px 4px 0 rgba(0,0,0,0.6);color:#111;
-  min-width:220px;max-width:260px;}
+  padding:10px 16px;box-shadow:6px 6px 0 rgba(0,0,0,0.6);color:#fff;
+  min-width:220px;max-width:260px;backdrop-filter: blur(4px);}
 
 .sprite-wrap{display:flex;flex-direction:column;align-items:center;}
-.sprite-shadow{width:100px;height:14px;background:radial-gradient(ellipse,rgba(0,0,0,.5) 0%,transparent 70%);
+.sprite-shadow{width:100px;height:14px;background:radial-gradient(ellipse,rgba(0,0,0,.6) 0%,transparent 70%);
   margin-top:-4px;border-radius:50%;}
 
 /* Status panel internals */
-.hud-name{font-size:.55rem;color:#111;margin-bottom:8px;font-weight:bold;
+.hud-name{font-size:.55rem;color:#fff;margin-bottom:8px;font-weight:bold;
   text-transform:uppercase;letter-spacing:1px;display:flex;justify-content:space-between;align-items:center;}
-.hud-level{font-size:.4rem;color:#555;background:#ddd;border-radius:4px;padding:2px 5px;}
-.bar-track{background:#bbb;border:2px solid #888;border-radius:6px;overflow:hidden;margin-bottom:5px;}
+.hud-level{font-size:.4rem;color:#fff;background:rgba(255,255,255,0.2);border-radius:4px;padding:3px 6px;}
+.bar-track{background:rgba(0,0,0,0.6);border:2px solid #555;border-radius:6px;overflow:hidden;margin-bottom:5px;}
 .bar-track-hp{height:14px;}
 .bar-track-mp{height:8px;}
 .bar-track-ult{height:6px;margin-bottom:0;}
@@ -130,70 +126,73 @@ canvas{image-rendering:pixelated;display:block;}
 .bar-hp.med{background:linear-gradient(90deg,#b89010,#e0c020);}
 .bar-mp{background:linear-gradient(90deg,#1850c0,#3070e8);box-shadow:0 0 6px rgba(50,100,240,0.5);}
 .bar-ult{background:linear-gradient(90deg,#8800bb,#ff00aa);box-shadow:0 0 8px rgba(255,0,170,0.6);}
-.bar-labels{font-family:'VT323';font-size:1.1rem;color:#444;display:flex;
+.bar-labels{font-family:'VT323';font-size:1.1rem;color:#ddd;display:flex;
   justify-content:space-between;margin-bottom:6px;line-height:1;}
 .bar-sub-labels{display:flex;gap:6px;margin-top:3px;}
-.bar-sub-label{font-family:'VT323';font-size:.9rem;color:#666;}
+.bar-sub-label{font-family:'VT323';font-size:.9rem;color:#bbb;}
 
-/* ══ DIALOGUE BOX (fixed height, comfortable) ══ */
+/* ══ DIALOGUE BOX ══ */
 .dialogue-box{
   position:absolute;bottom:0;left:0;right:0;
-  height:30%;
-  min-height:130px;
-  background:linear-gradient(160deg,#22223a,#14142a);
-  border-top:4px solid #f07898;
-  z-index:20;
-  display:flex;
-  box-shadow:0 -4px 20px rgba(240,120,152,0.2);
+  height:30%; min-height:130px;
+  background:rgba(15, 15, 25, 0.9);
+  border-top:4px solid var(--pink1);
+  z-index:20; display:flex;
+  box-shadow:0 -4px 25px rgba(240,120,152,0.25);
+  backdrop-filter: blur(8px);
 }
 .log-text-area{
   flex:1;padding:18px 22px;
   font-family:'Press Start 2P';font-size:.65rem;line-height:1.9;
-  color:#fff;text-shadow:1px 1px 0 #000;
+  color:#fff;text-shadow:2px 2px 0 #000;
   position:relative;display:flex;align-items:center;
 }
 .log-text-area::after{content:'▼';position:absolute;bottom:14px;right:18px;
   font-size:.7rem;animation:bounce 0.8s ease-in-out infinite;display:none;color:var(--yellow);}
 .log-text-area.waiting::after{display:block;}
 
-/* ══ ACTION BUTTONS (fixed, always visible) ══ */
+/* ══ ACTION BUTTONS ══ */
 .action-grid{
   display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;
   gap:8px;padding:12px;
   width:min(360px, 42vw);
-  background:#14142a;
-  border-left:4px solid #f07898;
+  background:rgba(20, 20, 35, 0.5);
+  border-left:4px solid var(--pink1);
   flex-shrink:0;
 }
 .action-btn{
-  background:linear-gradient(160deg,#f5f5f5,#ddd);
-  border:3px solid #444;border-radius:8px;
-  color:#111;font-family:'Press Start 2P';
+  background:rgba(30, 30, 50, 0.8);
+  border:2px solid #555;border-radius:8px;
+  color:#fff;font-family:'Press Start 2P';
   font-size:.45rem;cursor:pointer;
   transition:all 0.1s;
   padding:10px 6px;
-  box-shadow:3px 3px 0 #000;
+  box-shadow:4px 4px 0 #000;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:4px;text-align:center;
   line-height:1.4;
 }
 .action-btn:hover:not(:disabled){
-  transform:translate(-2px,-2px);box-shadow:5px 5px 0 #000;
-  background:linear-gradient(160deg,#fff,#eee);}
-.action-btn:active:not(:disabled){transform:translate(1px,1px);box-shadow:1px 1px 0 #000;}
-.action-btn:disabled{opacity:0.4;cursor:not-allowed;filter:grayscale(0.5);}
+  transform:translate(-2px,-2px);box-shadow:6px 6px 0 #000;
+  background:rgba(50, 50, 75, 0.9);}
+.action-btn:active:not(:disabled){transform:translate(2px,2px);box-shadow:2px 2px 0 #000;}
+.action-btn:disabled{opacity:0.4;cursor:not-allowed;filter:grayscale(0.7);}
 .action-btn .a-icon{font-size:1.2rem;line-height:1;}
-.action-btn .a-label{font-size:.4rem;color:#111;letter-spacing:.5px;}
-.action-btn .cost{font-family:'VT323';font-size:1rem;color:#555;line-height:1;}
-.btn-attack{border-color:#c01010;box-shadow:3px 3px 0 #600000;}
-.btn-skill{border-color:#1050c0;box-shadow:3px 3px 0 #001060;}
-.btn-switch{border-color:#108020;box-shadow:3px 3px 0 #003010;}
-.btn-ult{border-color:#8800cc;
-  background:linear-gradient(160deg,#fce0f0,#e8a0cc);
-  box-shadow:3px 3px 0 #440044;}
-.btn-ult:not(:disabled){box-shadow:3px 3px 0 #440044,0 0 12px rgba(200,0,200,0.3);}
-.btn-ult:hover:not(:disabled){background:linear-gradient(160deg,#fff,#f0c0e8);
-  box-shadow:5px 5px 0 #440044,0 0 20px rgba(255,0,220,0.5);}
+.action-btn .a-label{font-size:.4rem;color:#fff;letter-spacing:.5px;}
+.action-btn .cost{font-family:'VT323';font-size:1.1rem;color:#ccc;line-height:1;}
+
+.btn-attack{border-color:#ff5252;}
+.btn-attack:hover:not(:disabled){border-color:#ff8a80;}
+.btn-skill{border-color:#448aff;}
+.btn-skill:hover:not(:disabled){border-color:#82b1ff;}
+.btn-switch{border-color:#69f0ae;}
+.btn-switch:hover:not(:disabled){border-color:#b9f6ca;}
+
+.btn-ult{border-color:#e040fb; background:rgba(60, 20, 70, 0.8);}
+.btn-ult:not(:disabled){box-shadow:4px 4px 0 #000,0 0 12px rgba(224,64,251,0.4);}
+.btn-ult:hover:not(:disabled){background:rgba(90, 30, 100, 0.9);
+  box-shadow:6px 6px 0 #000,0 0 20px rgba(224,64,251,0.6);}
+.btn-ult .cost{color:#ff80ab;}
 
 /* ══ EFFECTS & ANIMATIONS ══ */
 .status-icon{position:absolute;top:-24px;font-size:1.6rem;animation:floatUp 1s ease-in-out infinite;}
@@ -214,33 +213,17 @@ canvas{image-rendering:pixelated;display:block;}
 @keyframes dmgFloat{0%{opacity:1;transform:translateY(0) scale(1.6)}100%{opacity:0;transform:translateY(-90px) scale(1)}}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 
-/* ══ BG DECORATIONS ══ */
-.neon-signs{position:absolute;top:8%;left:3%;right:3%;display:flex;justify-content:space-around;z-index:3;}
-.neon-sign{font-family:'Press Start 2P';font-size:.32rem;padding:4px 8px;border:1px solid;
-  animation:neonFlicker 4s step-end infinite;border-radius:2px;}
-.ns-pink{color:#ff6eb4;border-color:#ff6eb4;text-shadow:0 0 10px #ff6eb4;box-shadow:0 0 10px rgba(255,110,180,.4);}
-.ns-cyan{color:#00e5ff;border-color:#00e5ff;text-shadow:0 0 10px #00e5ff;box-shadow:0 0 10px rgba(0,229,255,.4);}
-.ns-yellow{color:#ffe234;border-color:#ffe234;text-shadow:0 0 10px #ffe234;}
-@keyframes neonFlicker{0%,88%,90%,92%,100%{opacity:1}89%,91%{opacity:.15}}
+/* Particles (Kept for vibe) */
 .rain{position:absolute;inset:0;pointer-events:none;z-index:2;overflow:hidden;}
 .raindrop{position:absolute;width:1px;background:linear-gradient(transparent,rgba(160,200,255,.4));animation:fall linear infinite;}
 @keyframes fall{from{transform:translateY(-100%)}to{transform:translateY(100vh)}}
-.book{position:absolute;z-index:4;font-family:'Press Start 2P';font-size:.3rem;padding:6px 10px;
-  animation:bookFloat 3s ease-in-out infinite;border-radius:2px;}
-.book-ujian{bottom:50%;left:10%;background:#6a0000;color:#fff;border-left:4px solid #ff4444;
-  box-shadow:3px 3px 0 rgba(0,0,0,.6);}
-.book-tugas{bottom:54%;left:36%;background:#002855;color:#fff;border-left:4px solid #4488ff;
-  box-shadow:3px 3px 0 rgba(0,0,0,.6);animation-delay:-1s;}
-.book-tilaron{bottom:50%;right:8%;background:#004a22;color:#fff;border-left:4px solid #44ff88;
-  box-shadow:3px 3px 0 rgba(0,0,0,.6);animation-delay:-2s;}
-@keyframes bookFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-12px) rotate(2deg)}}
 .galaxy-heart{position:absolute;bottom:42%;left:50%;transform:translateX(-50%);
   font-size:clamp(3rem,8vw,6rem);animation:heartbeat 1.5s ease-in-out infinite;z-index:3;
   filter:drop-shadow(0 0 20px #cc00ff) drop-shadow(0 0 40px #ff00aa);}
 @keyframes heartbeat{0%,100%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-50%) scale(1.12)}}
 
 /* ══ SWITCH MENU ══ */
-#switchMenu{position:absolute;inset:0;background:rgba(0,0,10,0.9);z-index:100;
+#switchMenu{position:absolute;inset:0;background:rgba(0,0,10,0.95);z-index:100;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   opacity:0;pointer-events:none;transition:opacity 0.25s;}
 #switchMenu.active{opacity:1;pointer-events:auto;}
@@ -290,12 +273,9 @@ canvas{image-rendering:pixelated;display:block;}
 
 /* ══ MOBILE ══ */
 @media(max-width:700px){
-  /* Title */
   .title-logo h1{font-size:clamp(1rem,6vw,1.6rem);}
   .love-tag{font-size:1.2rem;}
   .press-start{font-size:.5rem;}
-
-  /* Select */
   .select-title{font-size:.55rem;margin-bottom:16px;}
   .char-cards{gap:12px;}
   .char-card{width:calc(33vw - 16px);min-width:100px;max-width:150px;padding:10px 8px;}
@@ -304,10 +284,8 @@ canvas{image-rendering:pixelated;display:block;}
   .type-badge{font-size:.28rem;}
   .char-card-stats{font-size:1rem;}
   .select-btn{font-size:.55rem;padding:12px 24px;}
-
-  /* Battle arena */
-  #playerSprite{transform:scale(1.2);transform-origin:bottom center;}
-  #enemySprite{transform:scale(1.2) scaleX(-1);transform-origin:bottom center;}
+  #playerSprite{transform:scale(1.2); bottom:25%; transform-origin:bottom center;}
+  #enemySprite{transform:scale(1.2) scaleX(-1); bottom:25%; transform-origin:bottom center;}
   .shake{animation:shakeM .4s ease;}
   @keyframes shakeM{0%,100%{transform:scale(1.2) translate(0,0)}
     20%{transform:scale(1.2) translate(-5px,-3px)}40%{transform:scale(1.2) translate(5px,3px)}}
@@ -315,29 +293,23 @@ canvas{image-rendering:pixelated;display:block;}
   @keyframes eshakeM{0%,100%{transform:scale(1.2) scaleX(-1) translate(0,0)}
     20%{transform:scale(1.2) scaleX(-1) translate(-5px,-3px)}}
   #enemyStatus{min-width:140px;max-width:46vw;padding:7px 10px;top:5%;left:3%;}
-  #playerStatus{min-width:140px;max-width:46vw;padding:7px 10px;bottom:32%;right:3%;}
+  #playerStatus{min-width:140px;max-width:46vw;padding:7px 10px;bottom:36%;right:3%;}
   .hud-name{font-size:.4rem;}
   .bar-track-hp{height:10px;}
   .bar-track-mp{height:6px;}
   .bar-labels{font-size:.9rem;}
-
-  /* Dialogue & actions */
   .dialogue-box{height:35%;min-height:140px;}
   .log-text-area{font-size:.5rem;padding:12px 14px;line-height:1.7;}
   .action-grid{width:100%;gap:5px;padding:8px;}
   .action-btn{font-size:.35rem;padding:8px 4px;}
   .action-btn .a-icon{font-size:1rem;}
   .action-btn .cost{font-size:.85rem;}
-
-  /* Switch menu */
   .switch-title{font-size:.6rem;}
   .switch-cards{gap:10px;}
   .switch-card{width:120px;padding:10px;}
   .switch-img{width:56px;height:56px;}
   .switch-name{font-size:.3rem;}
   .switch-hp{font-size:1.2rem;}
-
-  /* Ending */
   .letter-popup{padding:24px 20px;}
   #letterContent{font-size:1.5rem;}
   .letter-title{font-size:.55rem;}
@@ -350,7 +322,7 @@ canvas{image-rendering:pixelated;display:block;}
   <div class="title-bg-anim"></div>
   <div class="title-stars" id="titleStars"></div>
   <div class="title-logo">
-    <img id="titleCatImg" src="assets/nyom_ult.png" alt="Nyom Cat"
+    <img id="titleCatImg" src="assets/characters/nyom_ult.png" alt="Nyom Cat"
          style="width:140px;height:140px;image-rendering:pixelated;object-fit:contain;margin:0 auto 20px;display:block;filter:drop-shadow(0 0 20px #f07898);animation:titlePulse 1.5s ease-in-out infinite;"/>
     <h1>MYNAA'S<br>BATTLE QUEST</h1>
     <div class="love-tag">💌 hey there cantikk, i lovee youu 💌</div>
@@ -368,23 +340,11 @@ canvas{image-rendering:pixelated;display:block;}
   <div class="battle-wrap" id="battleWrap">
     <div class="battle-bg bg-city" id="battleBg">
       <div class="rain" id="rainLayer"></div>
-      <div class="neon-signs" id="neonSigns">
-        <div class="neon-sign ns-pink">TOKO<br>BITUNG</div>
-        <div class="neon-sign ns-cyan">WARUNG<br>KOPI</div>
-        <div class="neon-sign ns-yellow">TAPITUR<br>AN</div>
-      </div>
-      <div class="buildings" id="buildingsLayer" style="position:absolute;bottom:45%;left:0;right:0;display:flex;align-items:flex-end;gap:1px;"></div>
-      <div id="studyLayer" style="display:none">
-        <div class="book book-ujian">Ujian!</div>
-        <div class="book book-tugas">Tugas</div>
-        <div class="book book-tilaron">Tilaron</div>
-      </div>
       <div id="galaxyLayer" style="display:none">
         <div class="galaxy-heart">💜</div>
         <canvas id="galaxyCanvas" style="position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;"></canvas>
       </div>
     </div>
-    <div class="ground ground-city" id="battleGround"></div>
 
     <div class="arena" id="arena">
       <div class="effect-overlay" id="effectLayer"></div>
@@ -445,14 +405,14 @@ canvas{image-rendering:pixelated;display:block;}
         <button class="action-btn btn-ult" id="btn-ult" onclick="doAction('ultimate')">
           <span class="a-icon" id="ultIcon">💥</span>
           <span class="a-label">ULTIMATE</span>
-          <span class="cost" style="color:#990044">100% ULT</span>
+          <span class="cost">100% ULT</span>
         </button>
       </div>
     </div>
   </div>
 
   <div id="switchMenu">
-    <div class="switch-title">✦ CHOOSE POKÉ... ER, CHARACTER ✦</div>
+    <div class="switch-title">✦ CHOOSE YOUR FIGHTER ✦</div>
     <div class="switch-cards" id="switchCardsContainer"></div>
     <button class="switch-cancel" onclick="closeSwitchMenu()">CANCEL</button>
   </div>
@@ -484,7 +444,7 @@ function drawSprite(canvas, pixelsFn, scale) {
 }
 
 // ══════════════════════════════════════════════
-//  COMPRESSED PIXEL ART ARRAYS (Tiggyy, Neo, Z)
+//  COMPRESSED PIXEL ART ARRAYS
 // ══════════════════════════════════════════════
 const C = {BK:'#000000',TR:'transparent',PK1:'#f07898',PK2:'#e85888',PK3:'#d03870',PK4:'#b82060',PK5:'#f8b0c8',PK6:'#fcd8e8',PK7:'#fce8f0',PK8:'#c84878',PK9:'#a03060',PKST:'#b83068',WH:'#ffffff',WH2:'#f5e8ee',GR1:'#5a7080',GR2:'#6a8090',GR3:'#7a90a0',GR4:'#4a6070',GR5:'#3a5060',GR6:'#8aaabb',GR7:'#aabccc',OR1:'#c87820',OR2:'#d89030',OR3:'#e8a840',OR4:'#b06010',OR5:'#f0c060',WCAT:'#f8f0e8',CA1:'#111111',CA2:'#1a1a1a',CA3:'#222222',CA4:'#2a2a2a',CA5:'#333333',CA6:'#3a3a3a',CA7:'#444444',CA8:'#555555',CA9:'#4a5a6a',CAL:'#c0ccdd',CAR:'#ff3333',EYES_BLUE:'#2244bb',EYES_BLUE2:'#3366ee',EYES_GLOW:'#8844ff',PINK_NOSE:'#ffaacc',NOSE2:'#ffbbdd'};
 
@@ -523,7 +483,7 @@ const CHARS_DATA = {
   tiggyy: {
     key:'tiggyy', name:'TIGGYY', type:'Cosmic',
     maxHp:120, maxMp:100, hp:120, mp:100, ult:0, atk:22, def:12, spd:18,
-    imgs: { idle:'assets/nyom_idle.png', attack:'assets/nyom_attack.png', ult:'assets/nyom_ult.png' },
+    imgs: { idle:'assets/characters/nyom_idle.png', attack:'assets/characters/nyom_attack.png', ult:'assets/characters/nyom_ult.png' },
     skill: { name:'NYOM BITE', mp:25, dmg:35, desc:'Cosmic chomp!' },
     ultimate: { name:'ULTIMATE NYOM', dmg:80, desc:'Galaxy-eating fury!' },
     skillIcon:'🍭', ultIcon:'🌌', fallbackAnim: { idle: tiggyy_idle, attack: tiggyy_attack, ult: tiggyy_ult }
@@ -531,7 +491,7 @@ const CHARS_DATA = {
   neo: {
     key:'neo', name:'NEO!', type:'Love',
     maxHp:100, maxMp:120, hp:100, mp:120, ult:0, atk:18, def:16, spd:20,
-    imgs: { idle:'assets/neo_idle.png', attack:'assets/neo_attack.png', ult:'assets/neo_ult.png' },
+    imgs: { idle:'assets/characters/neo_idle.png', attack:'assets/characters/neo_attack.png', ult:'assets/characters/neo_ult.png' },
     skill: { name:'HEART BEAM', mp:30, dmg:30, desc:'Love is power!' },
     ultimate: { name:'STARRY EYES', dmg:75, desc:'Galaxy magic unleashed!' },
     skillIcon:'💜', ultIcon:'⭐', fallbackAnim: { idle: neo_idle, attack: neo_attack, ult: neo_ult }
@@ -539,7 +499,7 @@ const CHARS_DATA = {
   z: {
     key:'z', name:'Z', type:'Drift',
     maxHp:150, maxMp:80, hp:150, mp:80, ult:0, atk:28, def:20, spd:15,
-    imgs: { idle:'assets/car_idle.png', attack:'assets/car_attack.png', ult:'assets/car_ult.png' },
+    imgs: { idle:'assets/characters/car_idle.png', attack:'assets/characters/car_attack.png', ult:'assets/characters/car_ult.png' },
     skill: { name:'PEKS DRIFT', mp:20, dmg:40, desc:'Burnout attack!' },
     ultimate: { name:'TURBO DRIFT', dmg:90, desc:'Maximum PEKS DRIFTING!' },
     skillIcon:'🚗', ultIcon:'💨', fallbackAnim: { idle: z_idle, attack: z_attack, ult: z_ult }
@@ -595,7 +555,7 @@ function showSelect(){
   });
 }
 
-// Fallback logic if image assets fail (draws canvas to DataURL)
+// Fallback logic if image assets fail
 function drawSpriteFallback(imgEl, charKey, state) {
   const cv = document.createElement('canvas');
   drawSprite(cv, CHARS_DATA[charKey].fallbackAnim[state], 4);
@@ -655,10 +615,7 @@ function typeNextLog() {
 
 function advanceDialogue() {
   if(isTyping && typeInterval) {
-    // Skip to end
     clearInterval(typeInterval);
-    const log = logQueue[0] ? logQueue[0] : null; // we shifted it, so it's active.
-    // Hacky way to skip - let it run out quickly
   }
 }
 
@@ -668,7 +625,6 @@ function clearLog() { document.getElementById('logTextArea').textContent = ''; d
 //  BATTLE SYSTEM
 // ══════════════════════════════════════════════
 function startBattle(){ 
-  // Initialize Party
   G.party = JSON.parse(JSON.stringify(CHARS_DATA)); // Deep copy
   G.currentLevel = 0; 
   initBattle(); 
@@ -680,18 +636,13 @@ function initBattle(){
   G.wave = 1; G.busy = false; G.bossPhase2 = false;
   initWave();
 
-  // Env
+  // Env Update
   document.getElementById('battleBg').className = 'battle-bg bg-'+lv.bg;
-  document.getElementById('battleGround').className = 'ground ground-'+lv.ground;
   document.getElementById('rainLayer').innerHTML='';
-  document.getElementById('neonSigns').style.display='none';
-  document.getElementById('buildingsLayer').innerHTML='';
-  document.getElementById('studyLayer').style.display='none';
   document.getElementById('galaxyLayer').style.display='none';
 
-  if(lv.bg==='city'){ document.getElementById('neonSigns').style.display='flex'; buildCity(); makeRain(); }
-  else if(lv.bg==='study'){ document.getElementById('studyLayer').style.display='block'; }
-  else { document.getElementById('galaxyLayer').style.display='block'; drawGalaxy(); }
+  if(lv.bg==='city'){ makeRain(); }
+  else if(lv.bg==='galaxy'){ document.getElementById('galaxyLayer').style.display='block'; drawGalaxy(); }
 
   setPlayerSprite('idle');
   setEnemySprite(lv.enemyFn);
@@ -731,7 +682,6 @@ function updateHUD(){
   document.getElementById('playerMpBar').style.width = (ch.mp/ch.maxMp*100)+'%';
   document.getElementById('playerUltBar').style.width = ch.ult+'%';
   
-  // Pulse ULT bar when ready
   const ultBar = document.getElementById('playerUltBar');
   ultBar.style.boxShadow = ch.ult >= 100 ? '0 0 16px #ff00aa, 0 0 30px rgba(255,0,170,0.5)' : '';
   const ultBtn = document.getElementById('btn-ult');
@@ -744,7 +694,6 @@ function updateHUD(){
   eHpBar.className = 'bar-fill bar-hp ' + (eHpPct < 25 ? 'low' : eHpPct < 50 ? 'med' : '');
   document.getElementById('enemyHpNum').textContent = Math.max(0,G.enemyHp)+'/'+G.enemyMaxHp;
 
-  // Buttons
   document.getElementById('skillIcon').textContent = ch.skillIcon;
   document.getElementById('skillName').textContent = ch.skill.name.split(' ')[0];
   document.getElementById('skillCost').textContent = ch.skill.mp+' MP';
@@ -787,12 +736,10 @@ function doAction(type){
     pEl.classList.add('shake');
     setTimeout(()=>{ pEl.classList.remove('shake'); setPlayerSprite('idle'); }, 400);
     
-    // Crit calc
     const isCrit = Math.random() < 0.1;
     let baseDmg = Math.max(1, ch.atk + Math.floor(Math.random()*8) - lv.enemyDef);
     if(isCrit) baseDmg = Math.floor(baseDmg * 1.5);
     
-    // Type advantage
     const mult = getTypeMultiplier(ch.type, lv.type);
     let finalDmg = Math.floor(baseDmg * mult);
     
@@ -855,7 +802,6 @@ function doAction(type){
 
 function checkEnemyDead(){
   if(G.enemyHp > 0) {
-    // Check boss phase
     if(G.currentLevel === 2 && G.enemyHp <= G.enemyMaxHp/2 && !G.bossPhase2) {
       G.bossPhase2 = true;
       addLog("The boss is enraged! Stats increased!", '#ff5252', 1500, () => setEnemyTurn());
@@ -877,7 +823,6 @@ function checkEnemyDead(){
         setPlayerTurn();
       });
     } else {
-      // Heal party a bit between levels
       Object.values(G.party).forEach(p => { if(p.hp>0) p.hp = Math.min(p.maxHp, p.hp + 30); });
       addLog(`You defeated the ${lv.enemyName}!`, '#ffeb3b', 1500, () => {
         if(G.currentLevel < 2) {
@@ -899,12 +844,10 @@ function enemyAct(){
   eEl.classList.add('enemy-shake');
   setTimeout(()=>eEl.classList.remove('enemy-shake'), 450);
   
-  // Smart AI Decisions
   const roll = Math.random();
   let baseAtk = lv.enemyAtk + (G.bossPhase2 ? 10 : 0);
   
   if(roll < 0.2) {
-    // Enemy defends/buffs
     addLog(`${lv.enemyName} is gathering energy...`, '#ccc', 1000, () => setPlayerTurn());
     return;
   }
@@ -946,7 +889,6 @@ function checkPartyWipe() {
       document.getElementById('battleScreen').classList.remove('active');
     });
   } else {
-    // Force switch menu
     openSwitchMenu();
   }
 }
@@ -978,7 +920,7 @@ function openSwitchMenu() {
 }
 
 function closeSwitchMenu() {
-  if(G.activeChar.hp <= 0) return; // Cannot close if current is dead
+  if(G.activeChar.hp <= 0) return; 
   document.getElementById('switchMenu').classList.remove('active');
 }
 
@@ -1004,7 +946,7 @@ function performSwitch(newKey) {
 }
 
 // ══════════════════════════════════════════════
-//  ENDING SEQUENCE (FIREWORKS, LETTER, ROAMING)
+//  ENDING SEQUENCE
 // ══════════════════════════════════════════════
 function triggerEnding() {
   switchScreen('endScreen');
@@ -1015,7 +957,6 @@ function triggerEnding() {
     const txt = document.getElementById('letterContent');
     popup.classList.add('show');
     
-    // Typewriter letter
     const msg = "hey there cantikk,\n\ni hope ur having fun playing this little game.\n\ni built this just for u...\n\ni lovee youu Mynaa 💌";
     let i = 0;
     txt.textContent = '';
@@ -1039,14 +980,12 @@ function spawnRoamingChars() {
     el.className = 'roaming-char';
     el.onerror = () => drawSpriteFallback(el, ch.key, 'idle');
     
-    // Start at bottom center
     let x = window.innerWidth/2 - 48;
     let y = window.innerHeight - 120;
     el.style.left = x + 'px';
     el.style.top = y + 'px';
     cont.appendChild(el);
     
-    // Roaming logic
     setInterval(() => {
       if(Math.random() > 0.3) {
         x += (Math.random() - 0.5) * 150;
@@ -1058,7 +997,6 @@ function spawnRoamingChars() {
         el.style.animation = 'walkBounce 0.3s ease 2';
         setTimeout(()=>el.style.animation='', 600);
         
-        // Random heart pop
         if(Math.random() > 0.7) {
           const h = document.createElement('div');
           h.className = 'roam-heart'; h.textContent = '❤';
@@ -1071,7 +1009,6 @@ function spawnRoamingChars() {
   });
 }
 
-// Simple Fireworks System
 function initFireworks() {
   const cv = document.getElementById('fireworksCanvas');
   const ctx = cv.getContext('2d');
@@ -1107,18 +1044,6 @@ function initFireworks() {
   animate();
 }
 
-// Misc BG Builders
-function buildCity(){
-  const bl=document.getElementById('buildingsLayer');
-  const cols=['#120020','#0a0018','#180035','#080012','#1a0040'];
-  [90,130,80,150,110,70,120,90,140,80,100,120,85].forEach((h,i)=>{
-    const b=document.createElement('div');
-    const w=20+Math.random()*35;
-    b.style.cssText=`width:${w}px;height:${h}px;background:${cols[i%cols.length]};flex-shrink:0;position:relative;`;
-    b.style.backgroundImage='repeating-linear-gradient(0deg,transparent,transparent 9px,rgba(255,200,50,.06) 9px,rgba(255,200,50,.06) 11px),repeating-linear-gradient(90deg,transparent,transparent 7px,rgba(255,200,50,.05) 7px,rgba(255,200,50,.05) 9px)';
-    bl.appendChild(b);
-  });
-}
 function makeRain(){
   const rl=document.getElementById('rainLayer');
   for(let i=0;i<50;i++){
